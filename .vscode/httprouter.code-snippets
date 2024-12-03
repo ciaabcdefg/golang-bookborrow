@@ -1,0 +1,27 @@
+{
+	// Place your borrow workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	"wrh": {
+		"scope": "go",
+		"prefix": "wrh",
+		"body": [
+			"${1:w} http.ResponseWriter, ${2:r} *http.Request, ${3:_} httprouter.Params",
+		],
+		"description": "Snippet to quickly type out httprouter parameters"
+	},
+	"httphand": {
+		"scope": "go",
+		"prefix": "httphand",
+		"body": [
+			"func (h *Handler) ${1:Handle}(${2:w} http.ResponseWriter, ${3:r} *http.Request, ${4:_} httprouter.Params) {",
+			"",
+			"}"
+		],
+		"description": "Snippet to quickly create httprouter handles"
+	}
+}
