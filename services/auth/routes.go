@@ -33,8 +33,6 @@ func NewHandler(repo *repo.Queries, db *sql.DB) *Handler {
 func (h *Handler) handleStudentLogin(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	var body StudentLoginParams
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		writer.WriteError(w, fmt.Errorf("failed to parse json - %s", err.Error()), http.StatusBadRequest)
