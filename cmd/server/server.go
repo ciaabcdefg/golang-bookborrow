@@ -16,18 +16,14 @@ import (
 	"github.com/rs/cors"
 )
 
-func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	w.Write([]byte("Hello world"))
-}
-
 func main() {
 	router := httprouter.New()
-	subrouter := prefixedrouter.PrefixedRouter{
-		Router: router,
-		Prefix: "/api/v1",
-	}
 
-	subrouter.GET("/", Index)
+	subrouter := prefixedrouter.New(
+		"/api/v1", router, prefixedrouter.EmptyMiddleware,
+	)
+
+	// router.GET("/", Index)
 
 	db, err := db.New()
 	if err != nil {
@@ -44,6 +40,12 @@ func main() {
 	log.Println("Connected to the database")
 	log.Printf("Listening on %s:%s\n", env.Hostname, env.Port)
 
-	corsHandler := cors.Default().Handler(router)
+	corsOptions := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:8080"},
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPatch},
+		AllowCredentials: true,
+	})
+
+	corsHandler := corsOptions.Handler(router)
 	http.ListenAndServe(env.Hostname+":"+env.Port, corsHandler)
 }
