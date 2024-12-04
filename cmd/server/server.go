@@ -5,6 +5,7 @@ import (
 	"borrow/internal/env"
 	"borrow/internal/prefixedrouter"
 	"borrow/repo"
+	"borrow/services/auth"
 	"borrow/services/books"
 	"borrow/services/borrow"
 	"borrow/services/students"
@@ -12,6 +13,7 @@ import (
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/rs/cors"
 )
 
 func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -37,9 +39,11 @@ func main() {
 	books.NewHandler(repo, db).RegisterRoutes(subrouter)
 	students.NewHandler(repo, db).RegisterRoutes(subrouter)
 	borrow.NewHandler(repo, db).RegisterRoutes(subrouter)
+	auth.NewHandler(repo, db).RegisterRoutes(subrouter)
 
 	log.Println("Connected to the database")
 	log.Printf("Listening on %s:%s\n", env.Hostname, env.Port)
 
-	http.ListenAndServe(env.Hostname+":"+env.Port, router)
+	corsHandler := cors.Default().Handler(router)
+	http.ListenAndServe(env.Hostname+":"+env.Port, corsHandler)
 }
